@@ -1,0 +1,16 @@
+# All major configurations for this project
+[runtime]
+    # Select 
+    # mode = "train" for training
+    #      = "live" for live emo detector
+    #      = "q2" for plots in q2
+    mode = "q2"
+
+[dir]
+    figures = "figs"
+    data = "data"
+    output = "outputs"
+
+[img_info]
+    size = [48, 48]
+    num_classes = 7
