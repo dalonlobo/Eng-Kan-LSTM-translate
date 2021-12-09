@@ -4,8 +4,9 @@
 # Email		    :  	x2020fyh@stfx.ca   |
 # ==================================== |
 import sys
+
+from src import q2, train
 from src.utils.file_helper import get_config
-from src import q2
 
 # globals
 CONFIG_FILE = "config.toml"
@@ -14,8 +15,8 @@ CONFIG = get_config(CONFIG_FILE)
 
 if __name__ == "__main__":
     if CONFIG["runtime"]["mode"] == "train":
-        pass
-    elif CONFIG["runtime"]["mode"] == "test":
+        train.run_model(config=CONFIG)
+    elif CONFIG["runtime"]["mode"] == "live":
         pass
     elif CONFIG["runtime"]["mode"] == "q2":
         q2.explore_data(config=CONFIG)

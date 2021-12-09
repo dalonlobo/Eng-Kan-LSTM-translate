@@ -1,6 +1,11 @@
 # Q1. Summary
 
-1. Application of Convolutional Neural Network to classify 7 different emotions on FER-2013 dataset from Kaggle.
+1. Describe the project titled: "Human facial expression detector using Deep Learning Network"
+2. Application of Convolutional Neural Network to classify 7 different emotions on FER-2013 dataset, performance analysis.
+3. Adding batch normalization after each layer improved the accuracy.
+4. Added dropout so that the model generalizes better.
+5. Callback for earlystopping is the good, since it allows us to experiment faster.
+6. System challenges faced during the model training and mitigated it with different approaches.
 
 # Q2. Dataset Description
 
@@ -34,4 +39,16 @@ Clearly from this sample set of images displayed, we can tell that:
 3. the facial expression of a person matches the emotion description on that image
 
 # Q3. Details
-...
+
+1. Facial expressions(emotions) are an important factor how humans communicate with each other. Humans can interpret facial expressions naturally, however, computers struggle to do the same. This project focuses on classification i.e., detection of human emotions from the images with facial expressions features using deep learning technique like Convolutional Neural Networks.
+2. s
+3. s
+4. s
+5. Model training was performed on GPU, Nvidia GeForce GTX 1050 Ti with 4 GB of memory. Training was the most intensive task, which when performed, it utilized the full capacity of the system. The main parameter that I used so that the system does not run out of memory was the training batch size. Successfully performed training on various settings with batch size = 32, which was ideal on my system. When we increase the batch size, the number of training images that get loaded into memory for processing increases. Some studies show that large batch sizes don't generalize well, although the reason for it is unknown. When batch size = 32, the total training images = 28709 / 32 = 897 minibatches where created. One epoch is complete when training is completed on all these 897 mini batches.
+
+
+## References
+
+1. Course project dataset: https://www.kaggle.com/msambare/fer2013/download
+2. Real-time Convolutional Neural Networks for Emotion and Gender Classification https://arxiv.org/pdf/1710.07557.pdf
+3. 

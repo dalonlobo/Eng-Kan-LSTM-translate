@@ -1,9 +1,10 @@
 """
 All the data exploration steps for q2
 """
-import pandas as pd
 from pathlib import Path
+
 import matplotlib.pyplot as plt
+import pandas as pd
 from keras.preprocessing.image import load_img
 
 

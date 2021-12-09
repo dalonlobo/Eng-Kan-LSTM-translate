@@ -1,9 +1,11 @@
-from pathlib import Path
 import sys
+from pathlib import Path
+from typing import Any, MutableMapping
+
 import toml
 
 
-def get_config(config_file: str) -> dict:
+def get_config(config_file: str) -> MutableMapping[str, Any]:
     """Read the configuration file in toml format
 
     Args:

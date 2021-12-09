@@ -4,7 +4,7 @@
     # mode = "train" for training
     #      = "live" for live emo detector
     #      = "q2" for plots in q2
-    mode = "q2"
+    mode = "train"
 
 [dir]
     figures = "figs"
@@ -14,3 +14,13 @@
 [img_info]
     size = [48, 48]
     num_classes = 7
+
+[cnn]
+    epoch = 60
+    batch_size = 32
+    learning_rate = 0.0001
+    loss = "categorical_crossentropy"
+    metrics = ["accuracy"]
+    # checkpoint file name
+    chk_path = "cp.ckpt"
+    csv_log = "training.log"
