@@ -5,7 +5,7 @@
 # ==================================== |
 import sys
 
-from src import q2, train
+from src import q2, FER_train, FER_predict
 from src.utils.file_helper import get_config
 
 # globals
@@ -15,9 +15,9 @@ CONFIG = get_config(CONFIG_FILE)
 
 if __name__ == "__main__":
     if CONFIG["runtime"]["mode"] == "train":
-        train.run_model(config=CONFIG)
-    elif CONFIG["runtime"]["mode"] == "live":
-        pass
+        FER_train.run_model(config=CONFIG)
+    elif CONFIG["runtime"]["mode"] == "FER-predict":
+        FER_predict.fer_predict(config=CONFIG)
     elif CONFIG["runtime"]["mode"] == "q2":
         q2.explore_data(config=CONFIG)
     else:

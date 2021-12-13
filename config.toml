@@ -2,14 +2,15 @@
 [runtime]
     # Select 
     # mode = "train" for training
-    #      = "live" for live emo detector
+    #      = "FER-predict" and show emoji
     #      = "q2" for plots in q2
-    mode = "train"
+    mode = "FER-predict"
 
 [dir]
     figures = "figs"
     data = "data"
     output = "outputs"
+    FER-model = "fer-detector-model"
 
 [img_info]
     size = [48, 48]

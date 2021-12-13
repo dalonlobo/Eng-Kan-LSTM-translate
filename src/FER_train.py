@@ -93,6 +93,7 @@ def run_model(config: dict) -> None:
     data_dir = Path().resolve() / config["dir"]["data"]
     train_dir = data_dir / "train"
     test_dir = data_dir / "test"
+    fig_dir = Path().resolve() / config["dir"]["figures"]
 
     # Load the dataset
     train_datagen = ImageDataGenerator(rescale=1.0 / 255, zoom_range=0.3, horizontal_flip=True)
@@ -120,6 +121,9 @@ def run_model(config: dict) -> None:
     # naming the model after my second name
     lobo_net = get_model(config)
     lobo_net.summary()
+
+    # plot the model
+    tf.keras.utils.plot_model(lobo_net, to_file=fig_dir / "lobo_net.png", show_shapes=True, show_layer_names=True)
 
     # steps has to be calculated
     steps_per_epoch = training_set.n // training_set.batch_size

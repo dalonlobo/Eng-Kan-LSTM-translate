@@ -44,11 +44,15 @@ Clearly from this sample set of images displayed, we can tell that:
 2. s
 3. s
 4. s
-5. Model training was performed on GPU, Nvidia GeForce GTX 1050 Ti with 4 GB of memory. Training was the most intensive task, which when performed, it utilized the full capacity of the system. The main parameter that I used so that the system does not run out of memory was the training batch size. Successfully performed training on various settings with batch size = 32, which was ideal on my system. When we increase the batch size, the number of training images that get loaded into memory for processing increases. Some studies show that large batch sizes don't generalize well, although the reason for it is unknown. When batch size = 32, the total training images = 28709 / 32 = 897 minibatches where created. One epoch is complete when training is completed on all these 897 mini batches.
+5. s
+6. Model training was performed on GPU, Nvidia GeForce GTX 1050 Ti with 4 GB of memory. Training was the most intensive task, which when performed, it utilized the full capacity of the system. The main parameter that I used so that the system does not run out of memory was the training batch size. Successfully performed training on various settings with batch size = 32, which was ideal on my system. When we increase the batch size, the number of training images that get loaded into memory for processing increases. Some studies show that large batch sizes don't generalize well [3]. The lack of generalization ability is due to the fact that large-batch methods tend to converge to sharp minimizers of the training function [3]. When batch size = 32, the total training images = 28709 / 32 = 897 minibatches were created. One epoch is complete when training is completed on all these 897 mini batches.
+
+    A suggestion from Dr. Levmann, that was used in this is, when I was struggling with compute resources to train such a huge model, training was performed on a reduced set of images. This greatly help me to experiment with different architectures.
+7. 
 
 
 ## References
 
 1. Course project dataset: https://www.kaggle.com/msambare/fer2013/download
 2. Real-time Convolutional Neural Networks for Emotion and Gender Classification https://arxiv.org/pdf/1710.07557.pdf
-3. 
+3. Trade-off between batch size and number of iterations to train a neural network: https://stats.stackexchange.com/a/236393/184082
