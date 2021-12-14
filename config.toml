@@ -4,7 +4,8 @@
     # mode = "train" for training
     #      = "FER-predict" and show emoji
     #      = "q2" for plots in q2
-    mode = "FER-predict"
+    #      = "plot_model_history" to plot the model history from logs
+    mode = "plot_model_history"
 
 [dir]
     figures = "figs"

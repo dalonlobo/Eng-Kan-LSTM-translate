@@ -2,12 +2,12 @@
 Use the trained model to predict the Facial expression and map it to a emoji
 """
 from pathlib import Path
-import numpy as np
 
-import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
 from matplotlib import image
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 from src import FER_train
 

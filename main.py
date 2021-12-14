@@ -7,6 +7,7 @@ import sys
 
 from src import q2, FER_train, FER_predict
 from src.utils.file_helper import get_config
+from src.utils.plot_helper import plot_model_history
 
 # globals
 CONFIG_FILE = "config.toml"
@@ -20,6 +21,8 @@ if __name__ == "__main__":
         FER_predict.fer_predict(config=CONFIG)
     elif CONFIG["runtime"]["mode"] == "q2":
         q2.explore_data(config=CONFIG)
+    elif CONFIG["runtime"]["mode"] == "plot_model_history":
+        plot_model_history(config=CONFIG)
     else:
         print("Error: Unknown runtime mode")
         sys.exit(-1)
