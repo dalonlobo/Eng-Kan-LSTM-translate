@@ -81,7 +81,7 @@ def get_callbacks(config: dict) -> list:
     # here patience is number of epochs without any improvements
     earlystop = EarlyStopping(monitor="val_loss", min_delta=0, patience=3, verbose=1, restore_best_weights=True)
 
-    reduce_lr = ReduceLROnPlateau(monitor="val_loss", factor=0.2, patience=6, verbose=1, min_delta=0.0001)
+    reduce_lr = ReduceLROnPlateau(monitor="val_loss", factor=0.2, patience=2, verbose=1, min_delta=0.0001)
 
     # Will not use tensorboard callback, since my system cannot handle the logging
     csv_logger = CSVLogger(output_dir / config["cnn"]["csv_log"])
