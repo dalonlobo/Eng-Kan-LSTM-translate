@@ -15,7 +15,7 @@ CONFIG_FILE = "config.toml"
 CONFIG = get_config(CONFIG_FILE)
 
 if __name__ == "__main__":
-    if CONFIG["runtime"]["mode"] == "train":
+    if CONFIG["runtime"]["mode"] == "FER-train":
         FER_train.run_model(config=CONFIG)
     elif CONFIG["runtime"]["mode"] == "FER-predict":
         FER_predict.fer_predict(config=CONFIG)

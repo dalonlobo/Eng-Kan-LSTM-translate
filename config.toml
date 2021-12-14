@@ -1,7 +1,7 @@
 # All major configurations for this project
 [runtime]
     # Select 
-    # mode = "train" for training
+    # mode = "FER-train" for training
     #      = "FER-predict" and show emoji
     #      = "q2" for plots in q2
     #      = "plot_model_history" to plot the model history from logs
