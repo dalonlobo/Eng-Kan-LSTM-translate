@@ -5,7 +5,7 @@
     #      = "FER-predict" and show emoji
     #      = "q2" for plots in q2
     #      = "plot_model_history" to plot the model history from logs
-    mode = "plot_model_history"
+    mode = "q2"
 
 [dir]
     figures = "figs"

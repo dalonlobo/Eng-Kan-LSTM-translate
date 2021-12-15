@@ -1,7 +1,7 @@
 # Q1. Summary
 
 1. Describe the project titled: "Human facial expression detector using Deep Learning Network"
-2. Application of Convolutional Neural Network to classify 7 different emotions on FER-2013 dataset, performance analysis.
+2. Application of Convolutional Neural Network to classify 7 different emotions on FER-2013 dataset, and included performance analysis.
 3. Adding batch normalization after each layer.
 4. Added dropout so that the model generalizes better.
 5. Callback for earlystopping is beneficial, since it allows us to experiment faster.
@@ -42,6 +42,28 @@ Clearly from this sample set of images displayed, we can tell that:
 3. the images are grayscale
 4. the facial expression of a person matches the emotion description on that image
 
+## AUC Values
+
+This dataset has images, and plotting AUC for all the pixels as features does not make sense. Hence, rescaled the images to 3x3 images so that each pixel corresponds to a feature. We get 9 features, and calculating the AUC on those, we get the following results. Used only 2 classes of images i.e. the angry and surprise class. Since its a multiclass classification, and having large number of images, using just 2 classes makes sense. Angry class is named 0 and Surprise is named 1.
+
+| Feature       |   AUC |
+| :------------ | ----: |
+| middle_center | 0.698 |
+| bottom_left   | 0.652 |
+| bottom_right  | 0.645 |
+| middle_left   | 0.641 |
+| bottom_center | 0.636 |
+| top_center    | 0.622 |
+| middle_right  | 0.618 |
+| top_left      | 0.581 |
+| top_right     | 0.563 |
+
+Every pixel is given a name which is self explanatory. The middle_center has the highest AUC score, which shows that the middle pixel i.e. 2,2 pixel gives more information in our classification task. These AUC scores can be converted to a image, and shown below:
+
+![AUC Figure](figs/AUC_image.png)
+
+We can see "hot" regions of the image that are most predictive, "cold" regions that are most negatively predictive, and neutral / non-predictive regions (which show up as red, blue, and white, respectively). Since all of our images are just the face cropped and centered, and the important features of expressions (angry and surprise) are usually at the center of image like mouth open feature for surprise, this makes sense that these center pixels have high AUC.
+
 # Q3. Details
 
 1. Facial expressions(emotions) are an important factor how humans communicate with each other. Humans can interpret facial expressions naturally, however, computers struggle to do the same. This project focuses on classification i.e., detection of human emotions from the images with facial expressions features using deep learning technique called Convolutional Neural Networks.
@@ -50,7 +72,7 @@ Clearly from this sample set of images displayed, we can tell that:
    
    ![Fig 3](figs/Model_1.png)
 
-    Here I've noticed the choice of loss function also plays an important role in model training. I've used categorical_crossentropy, which is ideal for multi class classification. Correct loss function has to be chosen based on the dataset and usecase. Used Adam(short for Adaptive Moment Estimation) optimizer which is an update to RMSProp optimizer[4].
+    Here I've noticed the choice of loss function also plays an important role in model training. I've used categorical_crossentropy, which is ideal for multi class classification. Correct loss function has to be chosen based on the dataset and usecase. Used Adam(short for Adaptive Moment Estimation) optimizer which is an update to RMSProp optimizer[4]. With optimezer, there is a hyper parameter called learning rate. This decides the rate at which the weights get updated. It should be small, so that while learning, the model does not skip the minima. The trade-off is that the smaller the learning rate, the longer the model takes to converge. I noticed this while experimenting and tuned this param accordingly. Usually learning rate of 0.001 to 0.0001 gave me good results. High Learning rate like 0.8 etc never converged, the loss was close to 2 in my case.
 
 3. Added batch normalization after each layer. The accuracy did not change much as shown in figure below. There is a sudden drop in accuracy at epoch 4, which could be caused by random selection of images for validation, and most of the images might have belonged to "disgust" category which has very few images in training set.
 
