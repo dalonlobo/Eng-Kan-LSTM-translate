@@ -8,12 +8,13 @@
 6. Use data augmentation, to make the model more robust for changes in images
 7. Final best model found after hyper parameter tuning, that performed best.
 8. Used the trained model for prediction on my facial expressions and converted those expressions to emojis.
-9. System challenges faced during the model training and mitigated it with different approaches.
-10. Accessed a new dataset for machine translation task and explored various NLP techniques.
-11. Perform machine translation using Simple RNN and analyse results.
-12. Perform machine translation using GRU using embeddings as input and without embeddings as input and compare results.
-13. Perform machine translation using LSTM and analyse results.
-14. Conclusions on trying different variations of RNNs on machine translation task.
+9. Plot feature maps of each layer of CNN and analyse the maps.
+10. System challenges faced during the model training and mitigated it with different approaches.
+11. Accessed a new dataset for machine translation task and explored various NLP techniques.
+12. Perform machine translation using Simple RNN and analyse results.
+13. Perform machine translation using GRU using embeddings as input and without embeddings as input and compare results.
+14. Perform machine translation using LSTM and analyse results.
+15. Conclusions on trying different variations of RNNs on machine translation task.
 
 # Q2. Dataset Description
 
@@ -141,12 +142,18 @@ The large dataset on its own, is too large to use in my project, also the large 
 
     Initally the model performed very poorly since the images where not cropped to include only the face, cropping is necessary since the model is trained with images that have only face in them. After cropping images, got these results, among the 6 images shown, there was 1 incorrect prediction. The incorrect prediction was on expression disgust, this category has least number of images in our training, that could be the reason it did not classify correctly. However, knowing how to use the model for a real world application is highly beneficial.
 
+9. The feature maps when model is run on 1 image in inference stage is shown below:
 
-9. Model training was performed on GPU, Nvidia GeForce GTX 1050 Ti with 4 GB of memory. Training was the most intensive task, which when performed, it utilized the full capacity of the system. The main parameter that I used so that the system does not run out of memory was the training batch size. Successfully performed training on various settings with batch size = 32, which was ideal on my system. When we increase the batch size, the number of training images that get loaded into memory for processing increases. Some studies show that large batch sizes don't generalize well [3]. The lack of generalization ability is due to the fact that large-batch methods tend to converge to sharp minimizers of the training function [3]. When batch size = 32, the total training images = 28709 / 32 = 897 minibatches were created. One epoch is complete when training is completed on all these 897 mini batches.
+    ![Fig 8](figs/model-feature-map.png)
+
+    Here first 16 features in each layers except dense layers are shown. We see that first layer captures all high level features, some feature maps retain the entire image. As we look further down at 5th row, the feature map looks more like a camera film. The lower we traverse, we get to see lower level features of the image being picked by the model. We can observe that after drop out layer, some of the feature maps are completely blank. When we look at last layer here, very low level features like some dashes and rectangles are captured.
+
+
+10. Model training was performed on GPU, Nvidia GeForce GTX 1050 Ti with 4 GB of memory. Training was the most intensive task, which when performed, it utilized the full capacity of the system. The main parameter that I used so that the system does not run out of memory was the training batch size. Successfully performed training on various settings with batch size = 32, which was ideal on my system. When we increase the batch size, the number of training images that get loaded into memory for processing increases. Some studies show that large batch sizes don't generalize well [3]. The lack of generalization ability is due to the fact that large-batch methods tend to converge to sharp minimizers of the training function [3]. When batch size = 32, the total training images = 28709 / 32 = 897 minibatches were created. One epoch is complete when training is completed on all these 897 mini batches.
 
     As suggested by Dr. Levmann, when I was struggling with compute resources to train such a huge model, training was performed on a reduced set of images. This greatly help me to experiment with different architectures faster then used entire dataset on those best model settings. This could have included some bias while selecting the smaller dataset.
 
-10. Performed English to Kannada translation using Tab-delimited Bilingual Sentence Pairs dataset from [ManyThings.org](http://www.manythings.org/anki/). This is the most difficult task I did in this project, since it involves NLP, which was not done during assignments. I started with data preparation as mentioned in "Dataset 2 Description" to get 379 sentences each. I removed all the punctuations as well, so that the model does not need to predict punctuations there by limiting the vocabulary. Furthermore, we cannot use this tiny dataset as is, it has to be converted to tokens. Tokenizing is turning each sentence into a sequence of integers (each integer being the index of a token in a dictionary) which is necessary since models perform better on numerical values than pure strings. Both inputs and targets are tokenized using `Tokenizer` from `tf.keras.preprocessing.text`. So each sentence is converted to tokens, however, they will have different lengths. For our downstream task we have to make all tokens of equal length, hence we pad a token at the end of each token sequence by using `pad_sequences` from `tf.keras.preprocessing.sequence`. Later this padded token can be replaced by `<PAD>` in predicted output to signify that this was a token added for padding. This completes the data preprocessing and data is ready to be consumed by the model.
+11. Performed English to Kannada translation using Tab-delimited Bilingual Sentence Pairs dataset from [ManyThings.org](http://www.manythings.org/anki/). This is the most difficult task I did in this project, since it involves NLP, which was not done during assignments. I started with data preparation as mentioned in "Dataset 2 Description" to get 379 sentences each. I removed all the punctuations as well, so that the model does not need to predict punctuations there by limiting the vocabulary. Furthermore, we cannot use this tiny dataset as is, it has to be converted to tokens. Tokenizing is turning each sentence into a sequence of integers (each integer being the index of a token in a dictionary) which is necessary since models perform better on numerical values than pure strings. Both inputs and targets are tokenized using `Tokenizer` from `tf.keras.preprocessing.text`. So each sentence is converted to tokens, however, they will have different lengths. For our downstream task we have to make all tokens of equal length, hence we pad a token at the end of each token sequence by using `pad_sequences` from `tf.keras.preprocessing.sequence`. Later this padded token can be replaced by `<PAD>` in predicted output to signify that this was a token added for padding. This completes the data preprocessing and data is ready to be consumed by the model.
 
     Interesting fact about `<PAD>`(padding) is that, when I used, highly imbalanced data, i.e., english sentences was short and one kannada sentence length was extremely large, hence all the sequences where padded to make it equal length and suddenly the validation model accuracy was close to 90%, this is because the model was predicting only `<PAD>` and since the performace metric is just accuracy, the accuracy score was high. However, mitigated this problem, by removing that one outlier sentence which had too many words.
 
@@ -156,7 +163,7 @@ The large dataset on its own, is too large to use in my project, also the large 
 
     The performance metric is `accuracy` which is not ideal for this task, as it expects the predicted translated text to be exact match to actual translated text. Languages are extremely robust, such that different words can have same meaning. With the constraint of this accuracy metric in mind, we use it since it is easier to implement. Other metric that could possibly used is BLEU score. The accuracy scores of most of my models are poor, however, we will judge the models based on how the model predicts the translated text on 2 unseen sentences.
 
-11. A simple RNN architecture is created using the following layers: embedding layer with output embedding size of 64, simple_rnn layer with 256 RNN units followed by 2 Dense layers with final Dense layer has 'softmax' activation for prediction. Dropout layer was added so that the model generalizes well. Model had 730,776 trainable parameters.
+12. A simple RNN architecture is created using the following layers: embedding layer with output embedding size of 64, simple_rnn layer with 256 RNN units followed by 2 Dense layers with final Dense layer has 'softmax' activation for prediction. Dropout layer was added so that the model generalizes well. Model had 730,776 trainable parameters.
 
     ![Simple RNN](figs/simple-rnn-model.png)
 

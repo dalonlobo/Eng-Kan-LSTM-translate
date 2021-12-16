@@ -7,7 +7,7 @@
     #      = "q2" for plots and AUC in q2
     #      = "mt-q2" for data explore of machine tranlation dataset in q2
     #      = "plot_model_history" to plot the model history from logs
-    mode = "mt-train"
+    mode = "FER-predict"
 
 [dir]
     figures = "figs"

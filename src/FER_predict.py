@@ -10,6 +10,7 @@ from matplotlib import image
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 from src import FER_train
+from src.utils.plot_helper import plot_feature_maps
 
 
 def fer_predict(config: dict) -> None:
@@ -53,3 +54,6 @@ def fer_predict(config: dict) -> None:
         ax[idx + 6].set_yticks([])
     plt.tight_layout()
     plt.savefig(fig_dir / "fer-pred.png")
+
+    # Plot feature maps for 1 prediction images
+    plot_feature_maps(config, lobo_net, test_set)
