@@ -44,7 +44,7 @@ def create_en_kn_tiny(config: dict) -> None:
         for idx, line in enumerate(f1):
             line = line.strip()
             kan_line = next(f2).strip()
-            match = re.match("^[A-Za-z\s]*$", line)
+            match = re.match("^[A-Za-z\s]*$", line)  # noqa: W605
             if (
                 match
                 and (len(line.split()) == config["mt"]["max_sen_word_limit"])

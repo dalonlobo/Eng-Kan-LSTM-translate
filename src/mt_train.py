@@ -4,13 +4,13 @@ from pathlib import Path
 from typing import Any
 
 from keras.layers.embeddings import Embedding
-from tensorflow.keras.layers import Dense, Dropout, SimpleRNN, GRU, LSTM
+from tensorflow.keras.layers import GRU, LSTM, Dense, Dropout, SimpleRNN
 from tensorflow.keras.losses import sparse_categorical_crossentropy
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
-from src.utils.plot_helper import plot_mtmodel_history
 from src.utils.nlp_utils import get_clean_mtdata, logits_to_sentence
+from src.utils.plot_helper import plot_mtmodel_history
 
 
 class MT_Models(object):

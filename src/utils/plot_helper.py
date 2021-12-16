@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Any
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -31,7 +32,7 @@ def plot_model_history(config: dict) -> None:
     print(f"Successfully saved the plot to: {fig_path}")
 
 
-def plot_mtmodel_history(config: dict, history) -> None:
+def plot_mtmodel_history(config: dict, history: Any) -> None:
     "Plots the machine translation model training history"
     fig_dir = Path().resolve() / config["dir"]["figures"]
     plt.plot(history.history["accuracy"])
