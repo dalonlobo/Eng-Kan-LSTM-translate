@@ -23,6 +23,10 @@ if __name__ == "__main__":
         from src import FER_predict
 
         FER_predict.fer_predict(config=CONFIG)
+    elif CONFIG["runtime"]["mode"] == "mt-train":
+        from src import mt_train
+
+        mt_train.train(config=CONFIG)
     elif CONFIG["runtime"]["mode"] == "q2":
         from src import q2
 

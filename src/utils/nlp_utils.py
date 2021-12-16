@@ -1,6 +1,8 @@
-from typing import Any
-import unicodedata
 import re
+import unicodedata
+from typing import Any
+
+import numpy as np
 import tensorflow as tf
 
 
@@ -61,3 +63,16 @@ def get_clean_mtdata(mt_data: list, max_sen_limit: int = 7) -> Any:
     target_tensor = tf.keras.preprocessing.sequence.pad_sequences(_target_tensor, maxlen=None, padding="post")
 
     return input_tensor, input_tokenizer, target_tensor, target_tokenizer
+
+
+def logits_to_sentence(logits: Any, tokenizer: Any) -> Any:
+    """
+    Turn logits from a neural network into sentence using the tokenizer
+    :param logits: Logits from a neural network
+    :param tokenizer: Keras Tokenizer fit on the labels
+    :return: String that represents the text of the logits
+    """
+    index_to_words = {id: word for word, id in tokenizer.word_index.items()}
+    index_to_words[0] = "<PAD>"
+
+    return " ".join([index_to_words[prediction] for prediction in np.argmax(logits, 1)])

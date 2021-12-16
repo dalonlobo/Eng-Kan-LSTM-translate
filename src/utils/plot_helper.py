@@ -29,3 +29,17 @@ def plot_model_history(config: dict) -> None:
     fig_path = fig_dir / f"{model_name}.png"
     plt.savefig(fig_path)
     print(f"Successfully saved the plot to: {fig_path}")
+
+
+def plot_mtmodel_history(config: dict, history) -> None:
+    "Plots the machine translation model training history"
+    fig_dir = Path().resolve() / config["dir"]["figures"]
+    plt.plot(history.history["accuracy"])
+    plt.plot(history.history["val_accuracy"])
+    plt.title(f'Model: {config["mt"]["model_name"]}')
+    plt.ylabel("accuracy")
+    plt.xlabel("epoch")
+    plt.legend(["train", "val"], loc="upper left")
+    fig_path = fig_dir / f'{config["mt"]["model_name"]}.png'
+    plt.savefig(fig_path)
+    print(f"Successfully saved the plot to: {fig_path}")

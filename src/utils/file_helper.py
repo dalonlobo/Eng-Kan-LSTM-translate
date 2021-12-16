@@ -1,10 +1,10 @@
+import json
+import re
 import sys
 from pathlib import Path
 from typing import Any, MutableMapping
 
-import re
 import toml
-import json
 
 
 def get_config(config_file: str) -> MutableMapping[str, Any]:

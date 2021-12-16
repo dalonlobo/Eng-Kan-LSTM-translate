@@ -3,11 +3,11 @@
     # Select 
     # mode = "FER-train" for training
     #      = "FER-predict" and show emoji
+    #      = "mt-train" for english to kannada translation model
     #      = "q2" for plots and AUC in q2
     #      = "mt-q2" for data explore of machine tranlation dataset in q2
     #      = "plot_model_history" to plot the model history from logs
-    #      = "mt-train" for english to kannada translation model
-    mode = "mt-q2"
+    mode = "mt-train"
 
 [dir]
     figures = "figs"
@@ -34,3 +34,14 @@
     dataset = "en-kn-large"
     max_sen_word_limit = 5
     max_sen_token_size = 7
+    # Select 
+    # model_name = "simple-rnn-model" for training on simple rnn
+    #      = "lstm-model" for training on lstm
+    model_name = "simple-rnn-model"
+    epochs = 50
+    batch_size = 64
+    val_split = 0.2
+    learning_rate = 0.001
+    embedding_size = 64
+    num_rnn_units = 256
+    dropout_rate = 0.2

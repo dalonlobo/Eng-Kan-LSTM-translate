@@ -5,11 +5,12 @@ import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from keras.preprocessing.image import load_img
 from PIL import Image
-import numpy as np
 from sklearn.metrics import roc_auc_score
+
 from src.utils.file_helper import create_en_kn_tiny
 from src.utils.nlp_utils import get_clean_mtdata
 
@@ -100,9 +101,10 @@ def explore_data(config: dict) -> None:
         return aucs.map(map_dict)
 
     for idx, feature in enumerate(features):
+        roc_score: float = roc_auc_score(bin_classes, resized_images[:, idx])  # type: ignore[call-overload]
         aucs.iloc[idx] = (
             feature,
-            roc_auc_score(bin_classes, resized_images[:, idx]),
+            roc_score,
         )
     aucs_sorted = aucs.sort_values(
         by="AUC",
