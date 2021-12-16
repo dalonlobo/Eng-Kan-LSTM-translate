@@ -45,7 +45,11 @@ def create_en_kn_tiny(config: dict) -> None:
             line = line.strip()
             kan_line = next(f2).strip()
             match = re.match("^[A-Za-z\s]*$", line)
-            if match and (len(line.split()) == 5) and all(word in tiny_vocab for word in kan_line.split()):
+            if (
+                match
+                and (len(line.split()) == config["mt"]["max_sen_word_limit"])
+                and all(word in tiny_vocab for word in kan_line.split())
+            ):
                 en_kn_tiny.append([line, kan_line])
     with open(data_path / "en-kn-tiny.json", "w", encoding="utf-8") as f:
         json.dump(en_kn_tiny, f)

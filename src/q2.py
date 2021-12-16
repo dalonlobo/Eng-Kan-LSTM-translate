@@ -11,6 +11,7 @@ from PIL import Image
 import numpy as np
 from sklearn.metrics import roc_auc_score
 from src.utils.file_helper import create_en_kn_tiny
+from src.utils.nlp_utils import get_clean_mtdata
 
 
 def explore_data(config: dict) -> None:
@@ -152,6 +153,14 @@ def explore_mt_data(config: dict) -> None:
             print("Successfully loaded: en-kn-tiny.json")
             print(f"Number of english sentences: {len(en_kn_tiny)}")
             print(f"Number of kannada sentences: {len(en_kn_tiny)}")
+            # Get the cleaned data
+            input_tensor, input_tokenizer, target_tensor, target_tokenizer = get_clean_mtdata(
+                en_kn_tiny, max_sen_limit=config["mt"]["max_sen_token_size"]
+            )
+            print("Max english sentence length:", input_tensor.shape[1])
+            print("Max kannada sentence length:", target_tensor.shape[1])
+            print("English vocabulary size:", len(input_tokenizer.word_index))
+            print("Kannada vocabulary size:", len(target_tokenizer.word_index))
         else:
             print("Creating tiny dataset")
             create_en_kn_tiny(config)

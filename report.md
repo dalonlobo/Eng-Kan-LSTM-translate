@@ -9,10 +9,11 @@
 7. Final best model found after hyper parameter tuning, that performed best.
 8. Used the trained model for prediction on my facial expressions and converted those expressions to emojis.
 9. System challenges faced during the model training and mitigated it with different approaches.
+10. Accessed a new dataset for machine translation task and explored various NLP techniques
 
 # Q2. Dataset Description
 
-## Dataset Description
+## Dataset 1 Description
 
 I have used [FER-2013](https://www.kaggle.com/msambare/fer2013/download) dataset from Kaggle. The dataset comprises of facial images, with emphasis on the importance of emotions. All the images have single face in the frame and each image is **48x48** pixel grayscale color scheme. The face is more or less centered and occupies about the same amount of space in each image. There are **7** different emotions category shown in the facial expression of the person. The 7 categories are numbered from **0 to 6** both included and can be mapped to the expression as follows: **(0=Angry, 1=Disgust, 2=Fear, 3=Happy, 4=Sad, 5=Surprise, 6=Neutral)**
 
@@ -63,6 +64,30 @@ Every pixel is given a name which is self explanatory. The middle_center has the
 ![AUC Figure](figs/AUC_image.png)
 
 We can see "hot" regions of the image that are most predictive, "cold" regions that are most negatively predictive, and neutral / non-predictive regions (which show up as red, blue, and white, respectively). Since all of our images are just the face cropped and centered, and the important features of expressions (angry and surprise) are usually at the center of image like mouth open feature for surprise, this makes sense that these center pixels have high AUC.
+
+## Dataset 2 Description
+
+For the machine translation task, I picked the Tab-delimited Bilingual Sentence Pairs dataset from [ManyThings.org](http://www.manythings.org/anki/). In this project I'm translating english sentences to a Indian regional language called Kannada, which is spoken in my home town. The dataset is Kannada - English [kan-eng.zip] (http://www.manythings.org/anki/kan-eng.zip).
+
+Some initial statistics from my exploratory data analysis. The dataset is 787Mb in size, with 2 seperate files, one for english sentences(train.en) and other for kannada(train.kn). Each line in train.en corresponds to its kannada translation in train.kn. 
+
+```
+Total number of english sentences: 4014931
+Total number of kannada sentences: 4014931
+```
+
+Its a large dataset with roughly 4 Million sentences. Hence, for this project, I prepared a subset of this dataset with maximum sentence word limited to 5 words without any special charecters and punctuations. \<start\> and \<end\> tokens are used to specify the delimits. Filter 2: sentences with all words belonging to a tiny kannada vocabulary are selected. With these filters, I get a dataset with following statistics:
+
+```
+Number of english sentences: 379
+Number of kannada sentences: 379
+Max English sentence length: 7
+Max Kannada sentence length: 7
+English vocabulary size: 513
+Kannada vocabulary size: 344
+```
+
+The large dataset on it own, is too large to use in my project, also the large dataset requires huge amount of data cleaning. Hence, this preprocessed dataset is used for all the analysis. Compared to vocabulary size, there are very few sentences, but it does not load my system and the models give sufficient results.
 
 # Q3. Details
 

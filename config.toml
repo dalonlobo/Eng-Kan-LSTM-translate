@@ -32,3 +32,5 @@
 # Settings for machine translation task
 [mt]
     dataset = "en-kn-large"
+    max_sen_word_limit = 5
+    max_sen_token_size = 7
