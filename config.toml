@@ -3,9 +3,11 @@
     # Select 
     # mode = "FER-train" for training
     #      = "FER-predict" and show emoji
-    #      = "q2" for plots in q2
+    #      = "q2" for plots and AUC in q2
+    #      = "mt-q2" for data explore of machine tranlation dataset in q2
     #      = "plot_model_history" to plot the model history from logs
-    mode = "q2"
+    #      = "mt-train" for english to kannada translation model
+    mode = "mt-q2"
 
 [dir]
     figures = "figs"
@@ -26,3 +28,7 @@
     # checkpoint file name
     chk_path = "cp.ckpt"
     csv_log = "training.log"
+
+# Settings for machine translation task
+[mt]
+    dataset = "en-kn-large"

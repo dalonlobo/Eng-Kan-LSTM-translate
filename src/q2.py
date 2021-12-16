@@ -1,6 +1,7 @@
 """
 All the data exploration steps for q2
 """
+import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -9,6 +10,7 @@ from keras.preprocessing.image import load_img
 from PIL import Image
 import numpy as np
 from sklearn.metrics import roc_auc_score
+from src.utils.file_helper import create_en_kn_tiny
 
 
 def explore_data(config: dict) -> None:
@@ -120,3 +122,38 @@ def explore_data(config: dict) -> None:
     plt.savefig(Path().resolve() / config["dir"]["figures"] / "AUC_image.png")
 
     print("Successfully saved auc image!")
+
+
+def explore_mt_data(config: dict) -> None:
+    """Explore the dataset for machine translation
+
+    Args:
+        config (dict): Configuration file
+
+    Returns:
+        None
+    """
+    data_dir = Path().resolve() / config["dir"]["data"]
+    if config["mt"]["dataset"] == "en-kn-large":
+        data_path = data_dir / "en-kn-large"
+        train_en_size, train_kn_size = 0, 0
+        print("Loading large data for analysis...")
+        with open(data_path / "train.en", encoding="utf-8") as f1:
+            for _ in f1:
+                train_en_size += 1
+        # Both files must have the same size
+        train_kn_size = train_en_size
+        print(f"Number of english sentences: {train_en_size}")
+        print(f"Number of kannada sentences: {train_kn_size}")
+        # Load the tiny en-kn data
+        if (data_path / "en-kn-tiny.json").is_file():
+            with open(data_path / "en-kn-tiny.json", encoding="utf-8") as f1:
+                en_kn_tiny = json.load(f1)
+            print("Successfully loaded: en-kn-tiny.json")
+            print(f"Number of english sentences: {len(en_kn_tiny)}")
+            print(f"Number of kannada sentences: {len(en_kn_tiny)}")
+        else:
+            print("Creating tiny dataset")
+            create_en_kn_tiny(config)
+    else:
+        print("Please select a known dataset for machine translation")

@@ -27,6 +27,10 @@ if __name__ == "__main__":
         from src import q2
 
         q2.explore_data(config=CONFIG)
+    elif CONFIG["runtime"]["mode"] == "mt-q2":
+        from src import q2
+
+        q2.explore_mt_data(config=CONFIG)
     elif CONFIG["runtime"]["mode"] == "plot_model_history":
         from src.utils.plot_helper import plot_model_history
 
