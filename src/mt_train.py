@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 
 from keras.layers.embeddings import Embedding
-from tensorflow.keras.layers import Dense, Dropout, SimpleRNN
+from tensorflow.keras.layers import Dense, Dropout, SimpleRNN, GRU, LSTM
 from tensorflow.keras.losses import sparse_categorical_crossentropy
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
@@ -47,6 +47,70 @@ class MT_Models(object):
         )
         return model
 
+    def gru_model(self) -> Any:
+        "Returns the GRU RNN model created"
+        model = Sequential()
+        model.add(
+            Embedding(
+                self.ip_vocab_size,
+                self.config["mt"]["embedding_size"],
+                input_length=self.input_shape[1],
+                input_shape=self.input_shape[1:],
+            )
+        )
+        model.add(GRU(self.config["mt"]["num_rnn_units"], return_sequences=True))
+        model.add(Dense(1024, activation="relu"))
+        model.add(Dropout(self.config["mt"]["dropout_rate"]))
+        model.add(Dense(self.tr_vocab_size, activation="softmax"))
+
+        # Compile model
+        model.compile(
+            loss=sparse_categorical_crossentropy,
+            optimizer=Adam(self.config["mt"]["learning_rate"]),
+            metrics=["accuracy"],
+        )
+        return model
+
+    def gru_wo_embed_model(self) -> Any:
+        "Returns the GRU RNN model created"
+        model = Sequential()
+        model.add(GRU(self.config["mt"]["num_rnn_units"], input_shape=self.input_shape[1:], return_sequences=True))
+        model.add(Dense(1024, activation="relu"))
+        model.add(Dropout(self.config["mt"]["dropout_rate"]))
+        model.add(Dense(self.tr_vocab_size, activation="softmax"))
+
+        # Compile model
+        model.compile(
+            loss=sparse_categorical_crossentropy,
+            optimizer=Adam(self.config["mt"]["learning_rate"]),
+            metrics=["accuracy"],
+        )
+        return model
+
+    def lstm_model(self) -> Any:
+        "Returns the GRU RNN model created"
+        model = Sequential()
+        model.add(
+            Embedding(
+                self.ip_vocab_size,
+                self.config["mt"]["embedding_size"],
+                input_length=self.input_shape[1],
+                input_shape=self.input_shape[1:],
+            )
+        )
+        model.add(LSTM(self.config["mt"]["num_rnn_units"], return_sequences=True))
+        model.add(Dense(1024, activation="relu"))
+        model.add(Dropout(self.config["mt"]["dropout_rate"]))
+        model.add(Dense(self.tr_vocab_size, activation="softmax"))
+
+        # Compile model
+        model.compile(
+            loss=sparse_categorical_crossentropy,
+            optimizer=Adam(self.config["mt"]["learning_rate"]),
+            metrics=["accuracy"],
+        )
+        return model
+
     def get_model(self) -> Any:
         "Helper to get the correct model"
         model_name = self.model_name.replace("-", "_")
@@ -76,6 +140,8 @@ def train(config: dict) -> None:
     )
     # cross entropy needs labels in 3D
     target_tensor = target_tensor.reshape(*target_tensor.shape, 1)
+    if config["mt"]["model_name"] == "gru-wo-embed-model":
+        input_tensor = input_tensor.reshape((*input_tensor.shape, 1))
     model = MT_Models(
         config,
         config["mt"]["model_name"],

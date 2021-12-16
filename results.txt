@@ -1,1 +1,0 @@
-<start> ಕಾಂಗ್ರೆಸ್ ವಿರುದ್ಧ ಮತ್ತು <end> <PAD> <PAD>[['Economic Development and Social Change', 'ಆರ್ಥಿಕ ಅಭಿವೃದ್ಧಿ ಮತ್ತು ಸಾಮಾಜಿಕ ಬದಲಾವಣೆ']]

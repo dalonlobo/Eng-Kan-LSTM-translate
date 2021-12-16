@@ -9,7 +9,11 @@
 7. Final best model found after hyper parameter tuning, that performed best.
 8. Used the trained model for prediction on my facial expressions and converted those expressions to emojis.
 9. System challenges faced during the model training and mitigated it with different approaches.
-10. Accessed a new dataset for machine translation task and explored various NLP techniques
+10. Accessed a new dataset for machine translation task and explored various NLP techniques.
+11. Perform machine translation using Simple RNN and analyse results.
+12. Perform machine translation using GRU using embeddings as input and without embeddings as input and compare results.
+13. Perform machine translation using LSTM and analyse results.
+14. Conclusions on trying different variations of RNNs on machine translation task.
 
 # Q2. Dataset Description
 
@@ -142,7 +146,123 @@ The large dataset on it own, is too large to use in my project, also the large d
 
     A suggestion from Dr. Levmann, that was used in this is, when I was struggling with compute resources to train such a huge model, training was performed on a reduced set of images. This greatly help me to experiment with different architectures.
 
+10. Performed English to Kannada translation using Tab-delimited Bilingual Sentence Pairs dataset from [ManyThings.org](http://www.manythings.org/anki/). This is the most difficult task, since it involves NLP, which was not done during assignments. I started with data preparation as mentioned in "Dataset 2 Description" to get 379 sentences each. I removed all the punctuations as well, so that the model does not need to predict punctuations there by limiting the vocabulary. Furthermore, we cannot use this dataset as is, it has to be converted to tokens. Tokenizing is turning each sentence into a sequence of integers (each integer being the index of a token in a dictionary) which is necessary since models perform better numerical values than pure strings. Both inputs and targets are tokenized using `Tokenizer` from `tf.keras.preprocessing.text`. So each sentence is converted to tokens, however, they will have different lengths. For our downstream task we have to make all tokens of equal length, hence we pad a token at the end of each token sequence by using `pad_sequences` from `tf.keras.preprocessing.sequence`. Later this padded token can be replaced by `<PAD>` in predicted output to signify that this was a token added for padding. This completes the data preprocessing and data is ready to be consumed by the model.
 
+    RNNs can take sequences of input and return sequences of output. CNN is not good for this task, since it does not retain the previous information which is required in machine translation. I used `many to many` RNN setup for this task because we input sequence of tokens and expect the model to translate to sequence of tokens in other language.
+
+    Embeddings are used to train the model instead of pure sequence of tokens because it allows us to capture more precise syntactic and semantic word relationships. This is achieved by projecting each word into n-dimensional space. Words with similar meanings occupy similar regions of this space; the closer two words are, the more similar they are. And often the vectors between words represent useful relationships, such as gender, verb tense, or even geopolitical relationships.There are pretrained embeddings package such as GloVe or word2vec but here i've used `Embedding` layer from keras.
+
+    The performance metric is `accuracy` which is not ideal for this task, as it expects the predicted translated text to be exact match to actual translated text. Languages are extremely robust, that different words can mean the same. With the constraint of this accuracy metric in mind, we use it since it is easier to implement. Other metric that could possible used is BLEU score. The accuracy scores of most of my models are poor, however, we will judge the models based on how the model predicts the translated text on 2 unseen sentences.
+
+11. A simple RNN architecture is created using the following layers: embedding layer with output embedding size of 64, simple_rnn layer with 256 RNN units followed by 2 Dense layers with final Dense layer has 'softmax' activation for prediction. Dropout layer was added so that the model generalizes well. Model had 730,776 trainable parameters.
+
+    ![Simple RNN](figs/simple-rnn-model.png)
+
+    Here we notice that the training accuracy keeps on increasing but validation accuracy stagnates after 10th epoch. The model overfits the data after 10th epoch. With such a small dataset, and relatively large vocabulary and the accuracy as performance metric can be attributed to the low performace score. However, the predicted results are good as shown below:
+
+    ```
+    Ground truth 1:
+	en: Economic Development and Social Change
+	kn: ಆರ್ಥಿಕ ಅಭಿವೃದ್ಧಿ ಮತ್ತು ಸಾಮಾಜಿಕ ಬದಲಾವಣೆ
+
+    Prediction:
+	kn: <start> ಇದು ಮನೆ ಮತ್ತು ಪ್ರಚಾರ ನಿಯಮಗಳು <end>
+
+
+    Ground truth 2:
+	en: in front of her house
+	kn: ಅವರು ಮನೆ ಮುಂದೆ
+
+    Prediction:
+	kn: <start> ಇದು ಮನೆ ಮುಂದೆ <end> <PAD> <PAD>
+    ```
+
+    Prediction analysis:
+
+    Text 1: RNN struggled to predict exact translation, however was able to translate one word correctly.
+
+    Text 2: The translation is almost accurate, the first translated word error can be attributed to the translation difficulty from english to kannada even for humans.
+
+12. GRU is Gated recurrent units which like LSTM are a gating mechanism in recurrent neural networks. Unlike LSTM, GRU has only 2 gates, reset gate and update gate. Reset gate, decides how much past information to forget. Update gate decides what information to discard and what information to add. The model performance with and without embedding layer is quite poor for GRU. Compared to GRU with embedding layer, the GRU without embedding is even worse. This shows that we get performance gain by using embeddings instead of input pure tokens.
+
+    <img src="figs/gru-model.png" width="425"/> <img src="figs/gru-wo-embed-model.png" width="425"/> 
+
+    ```
+    Results with embeddings:
+
+    Ground truth 1:
+	en: Economic Development and Social Change
+	kn: ಆರ್ಥಿಕ ಅಭಿವೃದ್ಧಿ ಮತ್ತು ಸಾಮಾಜಿಕ ಬದಲಾವಣೆ
+
+    Prediction:
+	kn: <start> ಇದು ಮತ್ತು ಮತ್ತು <end> <PAD> <PAD>
+
+
+    Ground truth 2:
+	en: in front of her house
+	kn: ಅವರು ಮನೆ ಮುಂದೆ
+
+    Prediction:
+	kn: <start> ರಾಹುಲ್ ಮನೆ ಆರೋಗ್ಯ <end> <PAD> <PAD>
+    ```
+
+    ```
+    Results without embeddings:
+    
+    Ground truth 1:
+	en: Economic Development and Social Change
+	kn: ಆರ್ಥಿಕ ಅಭಿವೃದ್ಧಿ ಮತ್ತು ಸಾಮಾಜಿಕ ಬದಲಾವಣೆ
+
+    Prediction:
+	kn: <start> ಇದು ವಿರುದ್ಧ <end> <end> <end> <PAD>
+
+
+    Ground truth 2:
+	en: in front of her house
+	kn: ಅವರು ಮನೆ ಮುಂದೆ
+
+    Prediction:
+	kn: <start> ಜೀವನ ಹೇಗೆ <end> <PAD> <PAD> <PAD>
+    ```
+
+    Prediction analysis:
+
+    With Embedding layer: GRU struggled to predict, however was able to translate one word correctly in both texts.
+
+    Without Embedding layer: The translation is useless and does not make sense. Other observation is that, it was able to predict the end token as well, in text1, there are 2 end tokens
+
+13. Long short-term memory (LSTM) is a RNN architecture but with 4 gates which performs different tasks. The vanilla RNN has a problem of vanishing gradients, i.e., during backpropogation as we reach the initial layers the gradient diminishes exponentially and becomes so small such that those initial layers will not get any updates. The RNN essentially have short term memory, hence LSTM was introduced. With its various gates its able to retain relavant information longer.
+
+    Ran the LSTM with 64 units and got the following performance during training. There were 534,232 trainable parameters in this LSTM.
+
+    ![LSTM](figs/lstm-model.png)
+
+    From the figure we notice that the train and validation accuracy start to diverge, showing that training is overfitting. However, there is slight improvement in validation accuracy. Improvement starts getting stagnated about after 80th epoch. The interesting fact comes when we see the results.
+
+    ```
+    Ground truth 1:
+	en: Economic Development and Social Change
+	kn: ಆರ್ಥಿಕ ಅಭಿವೃದ್ಧಿ ಮತ್ತು ಸಾಮಾಜಿಕ ಬದಲಾವಣೆ
+
+    Prediction:
+	kn: <start> ಇಬ್ಬರ ಮತ್ತು ಮತ್ತು <end> <end> <PAD>
+
+
+    Ground truth 2:
+	en: in front of her house
+	kn: ಅವರು ಮನೆ ಮುಂದೆ
+
+    Prediction:
+	kn: <start> ನಿಮ್ಮ ಮನೆ ಮುಂದೆ <end> <PAD> <PAD>
+    ```
+
+    Prediction analysis:
+
+    Text 1: The prediction has only 1 correct word and result is similar to Simple RNN.
+
+    Text 2: Here translation is almost accurate, better than the simple RNN.
+
+14. The results are not as good as how google translates, because, the dataset used for these experiments are relatively tiny with larger vocabulary and shorter training period. Even with such a tiny set of 379 sentences, the Simple RNN and LSTM was able to learn from this sequential data and translate it, which is the most interesting finding of this project. LSTM was the best performer. With more cleaned data and longer training and possible more LSTM units this model would perform better.
 
 ## References
 

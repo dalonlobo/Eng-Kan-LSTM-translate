@@ -36,12 +36,14 @@
     max_sen_token_size = 7
     # Select 
     # model_name = "simple-rnn-model" for training on simple rnn
-    #      = "lstm-model" for training on lstm
-    model_name = "simple-rnn-model"
-    epochs = 50
+    #      = "gru-model" for training on gru
+    #      = "gru-wo-embed-model" for training on gru
+    #      = "lstm-model" for training on gru
+    model_name = "lstm-model"
+    epochs = 150
     batch_size = 64
     val_split = 0.2
     learning_rate = 0.001
-    embedding_size = 64
-    num_rnn_units = 256
+    embedding_size = 128
+    num_rnn_units = 64
     dropout_rate = 0.2
